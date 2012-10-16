@@ -5,10 +5,11 @@
 # 1. Go to Yahoo weather http://weather.yahoo.com/
 # 2. Find the weather for you location
 # 3. Copy the last numbers in that URL. e.g. "http://weather.yahoo.com/united-states/california/newport-beach-12796587/" has the number "12796587"
-location="12796587"
+location="26235342"
 
 # Can be any of {c,f,k}.
-unit="f"
+unit="c"
+unit_display="℃"
 
 # The update period in seconds.
 update_period=600
@@ -106,7 +107,6 @@ if [ -n "$degree" ]; then
     if [ "$unit" == "k" ]; then
         degree=$(echo "${degree} + 273.15" | bc)
     fi
-    unit_upper=$(echo "$unit" | tr '[cfk]' '[CFK]')
     condition_symbol=$(get_condition_symbol "$condition")
-    echo "${condition_symbol} ${degree}°${unit_upper}"
+    echo "${condition_symbol} ${degree}${unit_display}"
 fi
