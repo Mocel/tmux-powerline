@@ -12,6 +12,9 @@ source "${cwd}/lib.sh"
 
 segments_path="${cwd}/${segments_dir}"
 
+# Mute this statusbar?
+mute_status_check "right"
+
 # Segment
 # Comment/uncomment the register function call to enable or disable a segment.
 
@@ -23,8 +26,9 @@ pwd+=(["separator"]="${separator_left_bold}")
 #register_segment "pwd"
 
 declare -A mail_count
-mail_count+=(["script"]="${segments_path}/maildir_count.sh")
-#mail_count+=(["script"]="${segments_path}/apple_mail_count.sh")
+mail_count+=(["script"]="${segments_path}/mail_count_maildir.sh")
+#mail_count+=(["script"]="${segments_path}/mail_count_gmail.sh")
+#mail_count+=(["script"]="${segments_path}/mail_count_apple_mail.sh")
 mail_count+=(["foreground"]="white")
 mail_count+=(["background"]="red")
 mail_count+=(["separator"]="${separator_left_bold}")
@@ -33,6 +37,8 @@ register_segment "mail_count"
 declare -A now_playing
 if [ "$PLATFORM" == "linux" ]; then
   now_playing+=(["script"]="${segments_path}/np_mpd.sh")
+  #now_playing+=(["script"]="${segments_path}/np_mpd_simple.sh")
+  #now_playing+=(["script"]="${segments_path}/np_mocp.sh")
   #now_playing+=(["script"]="${segments_path}/np_spotify_linux_wine.sh")
   #now_playing+=(["script"]="${segments_path}/np_spotify_linux_native.sh")
   #now_playing+=(["script"]="${segments_path}/np_rhythmbox.sh")
@@ -47,6 +53,13 @@ if [[ ${now_playing["script"]} ]]; then
   now_playing+=(["separator"]="${separator_left_bold}")
   register_segment "now_playing"
 fi
+
+declare -A cpu
+cpu+=(["script"]="${segments_path}/cpu.sh")
+cpu+=(["foreground"]="colour136")
+cpu+=(["background"]="colour240")
+cpu+=(["separator"]="${separator_left_bold}")
+#register_segment "cpu"
 
 declare -A load
 load+=(["script"]="${segments_path}/load.sh")
@@ -67,7 +80,8 @@ battery+=(["separator"]="${separator_left_bold}")
 #register_segment "battery"
 
 declare -A weather
-weather+=(["script"]="${segments_path}/weather.sh")
+weather+=(["script"]="${segments_path}/weather_yahoo.sh")
+#weather+=(["script"]="${segments_path}/weather_google.sh")
 weather+=(["foreground"]="colour255")
 weather+=(["background"]="colour37")
 weather+=(["separator"]="${separator_left_bold}")

@@ -46,16 +46,16 @@ battery_status()
 case $(uname -s) in
     "Linux")
         BATPATH=/sys/class/power_supply/BAT0
-		if [ ! -f $BATPATH ]; then
+		if [ ! -d $BATPATH ]; then
 			BATPATH=/sys/class/power_supply/BAT1
 		fi
         STATUS=$BATPATH/status
         BAT_FULL=$BATPATH/charge_full
-		if [ ! -f $BAT_FULL ]; then
+		if [ ! -r $BAT_FULL ]; then
 			BAT_FULL=$BATPATH/energy_full
 		fi
         BAT_NOW=$BATPATH/charge_now
-		if [ ! -f $BAT_NOW ]; then
+		if [ ! -r $BAT_NOW ]; then
 			BAT_NOW=$BATPATH/energy_now
 		fi
 

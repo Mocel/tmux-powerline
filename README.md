@@ -1,18 +1,18 @@
 # tmux-powerline
-This is a set of scripts (segments) for making a nice and dynamic tmux status-bar where elements can come and disappears depending on events. I really like the look of [Lokaltog/vim-powerline](https://github.com/Lokaltog/vim-powerline) and I decided I wanted the same for tmux.
+This is a set of scripts (segments) for making a nice and dynamic tmux statusbar where elements can come and disappears depending on events. I really like the look of [Lokaltog/vim-powerline](https://github.com/Lokaltog/vim-powerline) and I decided I wanted the same for tmux.
 
 The following segments exists for now:
 * LAN & WAN IP addresses.
-* Now Playing for MPD, Spotify (GNU/Linux native or wine, OS X), iTunes (OS X), Rhythmbox, Banshee and Audacious.
-* New mail count for Maildir and Apple Mail.
+* Now Playing for MPD, Spotify (GNU/Linux native or wine, OS X), iTunes (OS X), Rhythmbox, Banshee, MOC, and Audacious.
+* New mail count for GMail, Maildir and Apple Mail.
 * GNU/Linux and Macintosh OS X battery status (uses [richo/dotfiles/bin/battery](https://github.com/richoH/dotfiles/blob/master/bin/battery)).
-* Weather in Celsius, Fahrenheit and Kelvin using Google's weather API.
-* System load and uptime.
+* Weather in Celsius, Fahrenheit and Kelvin using Yahoo Weather.
+* System load, cpu usage and uptime.
 * Git, SVN and Mercurial branch in CWD.
 * Date and time.
 * Hostname.
 * tmux info.
-* CWD in pane
+* CWD in pane.
 * Current X keyboard layout.
 
 Check [segments/](https://github.com/erikw/tmux-powerline/tree/master/segments) for more undocumented segments and details.
@@ -51,14 +51,15 @@ Requirements for the lib to work are:
 
 * Recent tmux version
 * `bash --version` >= 4.0
-* A patched font. Follow instructions at [Lokaltog/vim-powerline/fontpatcher](https://github.com/Lokaltog/vim-powerline/tree/develop/fontpatcher).
+* A patched font. Follow instructions at [Lokaltog/vim-powerline/fontpatcher](https://github.com/Lokaltog/vim-powerline/tree/develop/fontpatcher) or [download](https://github.com/Lokaltog/vim-powerline/wiki/Patched-fonts) a new one.
 
 ## Segment Requirements
 Requirements for some segments. You only need to fullfill the requirements for those segments you want to use.
 
-* WAN IP: curl
+* WAN IP: curl, bc
 * MPD now playing: [libmpdclient](http://sourceforge.net/projects/musicpd/files/libmpdclient/)
 * xkb_layout: X11, XKB
+* GMail count: wget.
 
 ## OS X specific requirements
 
@@ -100,7 +101,7 @@ $ git clone git://github.com/erikw/tmux-powerline.git
 
 Now edit your `~/.tmux.conf` to use the scripts:
 
-<!-- Close syntax enoguth. -->
+<!-- Close syntax enought. -->
 ```vim
 set-option -g status on
 set-option -g status-interval 2
@@ -125,6 +126,13 @@ Some segments e.g. cwd and cvs_branch needs to find the current working director
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#I_#P") "$PWD")'
 ```
 
+You can toggle the visibility of the statusbars by adding the following to your `~/.tmux.conf`:
+
+```vim
+bind C-[ run '~/path/to/tmux-powerline/mute_statusbar.sh left'		# Mute left statusbar.
+bind C-] run '~/path/to/tmux-powerline/mute_statusbar.sh right'		# Mute right statusbar.
+```
+
 # Configuration
 
 Edit the two status scripts to suit you needs. A number of common segments are included that covers some general functions like time, date, battery etc. The segments can be moved around and does not needs to be in the order (or same file) as they are now. It should be quite easy to add you own segments.
@@ -146,6 +154,14 @@ time+=(["separator"]="${separator_left_thin}")	# mandatory, the separator to use
 time+=(["separator_fg"]="default")				# optional, overrides the default blending coloring of the separator with a custom colored foreground.
 register_segment "time"							# Registers the name of the array declared above.
 ```
+# Debugging
+
+Some segments might not work on your system for various reasons such as missing programs or different versions not having the same options. If a segment fails the printing should be aborted. To investigate further why a segment fails you can run
+
+```bash
+$ bash -x ~/path/to/failing/segment.sh
+```
+
 # Hacking
 
-This project can only gain positivly from contributions. Fork today and make your own enhancments and segments to share back! 
+This project can only gain positively from contributions. Fork today and make your own enhancments and segments to share back!
